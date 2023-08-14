@@ -5,13 +5,14 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>{{ title or metadata.title }}</title>
 		<meta name="description" content="{{ description or metadata.description }}">
+		{% favicons './public/img/favicon/favicon.svg', appleIconBgColor='#123' %}
 
 		{#- Atom and JSON feeds included by default #}
 		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="{{ metadata.title }}">
 		<link rel="alternate" href="/feed/feed.json" type="application/json" title="{{ metadata.title }}">
 
 		{#- Uncomment this if you’d like folks to know that you used Eleventy to build your site!  #}
-		{#- <meta name="generator" content="{{ eleventy.generator }}"> #}
+		<meta name="generator" content="{{ eleventy.generator }}">
 
 		{#-
 		CSS bundles are provided via the `eleventy-plugin-bundle` plugin:
@@ -54,7 +55,7 @@
 			{{ content | safe }}
 		</main>
 
-		<footer></footer>
+		<footer>Created by Alex Warren Web Design</footer>
 
 		<!-- Current page: {{ page.url | htmlBaseUrl }} -->
 	</body>

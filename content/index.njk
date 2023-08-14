@@ -8,6 +8,7 @@ numberOfLatestPostsToShow: 3
 {% set postsCount = collections.posts | length %}
 {% set latestPostsCount = postsCount | min(numberOfLatestPostsToShow) %}
 <h1>Latest {{ latestPostsCount }} Post{% if latestPostsCount != 1 %}s{% endif %}</h1>
+{% image "../public/img/logo.png", "A company logo in green with 'AW'" %}
 
 {% set postslist = collections.posts | head(-1 * numberOfLatestPostsToShow) %}
 {% set postslistCounter = postsCount %}
@@ -19,10 +20,10 @@ numberOfLatestPostsToShow: 3
 {% endif %}
 
 {# List every content page in the project #}
-{#
-<ul>
+
+{# <ul>
 	{%- for entry in collections.all %}
 	<li><a href="{{ entry.url }}"><code>{{ entry.url }}</code></a></li>
 	{%- endfor %}
-</ul>
-#}
+</ul> #}
+
