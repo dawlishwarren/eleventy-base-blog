@@ -1,63 +1,86 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="{{ metadata.language }}">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>{{ title or metadata.title }}</title>
-		<meta name="description" content="{{ description or metadata.description }}">
-		{% favicons './public/img/favicon/favicon.svg', appleIconBgColor='#123' %}
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ title or metadata.title }}</title>
+    <meta
+      name="description"
+      content="{{ description or metadata.description }}"
+    />
+    {% favicons './public/img/favicon/favicon.svg', appleIconBgColor='#123' %}
+    {#- Atom and JSON feeds included by default #}
+    <link
+      rel="alternate"
+      href="/feed/feed.xml"
+      type="application/atom+xml"
+      title="{{ metadata.title }}"
+    />
+    <link
+      rel="alternate"
+      href="/feed/feed.json"
+      type="application/json"
+      title="{{ metadata.title }}"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+    {#- Uncomment this if you’d like folks to know that you used Eleventy to
+    build your site! #}
+    <meta name="generator" content="{{ eleventy.generator }}" />
 
-		{#- Atom and JSON feeds included by default #}
-		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="{{ metadata.title }}">
-		<link rel="alternate" href="/feed/feed.json" type="application/json" title="{{ metadata.title }}">
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-		{#- Uncomment this if you’d like folks to know that you used Eleventy to build your site!  #}
-		<meta name="generator" content="{{ eleventy.generator }}">
+    {#- CSS bundles are provided via the `eleventy-plugin-bundle` plugin: 1. You
+    can add to them using `{% css %}` 2. You can get from them using `{%
+    getBundle "css" %}` or `{% getBundleFileUrl "css" %}` 3. You can do the same
+    for JS: {% js %}{% endjs %} and
+    <script>
+      {% getBundle "js" %}
+    </script>
+    4. Learn more: https://github.com/11ty/eleventy-plugin-bundle #} {#- Add an
+    arbitrary string to the bundle #} {%- css %}* { box-sizing: border-box; }{%
+    endcss %} {#- Add the contents of a file to the bundle #} {%- css %}{%
+    include "public/css/index.css" %}{% endcss %} {#- Or add from node_modules
+    #} {# {%- css %}{% include "node_modules/prismjs/themes/prism-okaidia.css"
+    %}{% endcss %} #} {#- Render the CSS bundle using Inlined CSS (for the
+    fastest site performance in production) #}
+    <style>
+      {% getBundle "css" %}
+    </style>
+    {#- Renders the CSS bundle using a separate file, if you can't set CSP
+    directive style-src: 'unsafe-inline' #} {#- <link rel="stylesheet" href="{%
+    getBundleFileUrl "css" %}"> #}
+  </head>
+  <body>
+    <a href="#skip" class="visually-hidden">Skip to main content</a>
+    <header style="background-color: #00a95f" class='container-fluid'>
+      <a href="/" class="home-link" style='color: #fff'>{{ metadata.title }}</a>
+      {#- Read more about `eleventy-navigation` at
+      https://www.11ty.dev/docs/plugins/navigation/ #}
+      <nav class="container text-center " >
+        <h2 class="visually-hidden">Top level navigation menu</h2>
+        <div class="row">
+          <ul class="nav justify-content-flex-end">
+            {%- for entry in collections.all | eleventyNavigation %}
+            <li class="nav-item col">
+              <a href='{{ entry.url }}' style='color: #fff' {% if entry.url == page.url %} aria-current="page"{% endif %} >
+{{ entry.title }} </a>
+            </li>
+            {%- endfor %}
+          </ul>
+        </div>
+      </nav>
+    </header>
+    <main id="skip">{{ content | safe }}</main>
+    <footer class="bg-light border-bottom border-body text-center" data-bs-theme="light">Created by Alex Warren Web Design</footer>
 
-		{#-
-		CSS bundles are provided via the `eleventy-plugin-bundle` plugin:
-		1. You can add to them using `{% css %}`
-		2. You can get from them using `{% getBundle "css" %}` or `{% getBundleFileUrl "css" %}`
-		3. You can do the same for JS: {% js %}{% endjs %} and <script>{% getBundle "js" %}</script>
-		4. Learn more: https://github.com/11ty/eleventy-plugin-bundle
-		#}
-
-		{#- Add an arbitrary string to the bundle #}
-		{%- css %}* { box-sizing: border-box; }{% endcss %}
-		{#- Add the contents of a file to the bundle #}
-		{%- css %}{% include "public/css/index.css" %}{% endcss %}
-		{#- Or add from node_modules #}
-		{# {%- css %}{% include "node_modules/prismjs/themes/prism-okaidia.css" %}{% endcss %} #}
-
-		{#- Render the CSS bundle using Inlined CSS (for the fastest site performance in production) #}
-		<style>{% getBundle "css" %}</style>
-		{#- Renders the CSS bundle using a separate file, if you can't set CSP directive style-src: 'unsafe-inline' #}
-		{#- <link rel="stylesheet" href="{% getBundleFileUrl "css" %}"> #}
-	</head>
-	<body>
-		<a href="#skip" class="visually-hidden">Skip to main content</a>
-
-		<header>
-			<a href="/" class="home-link">{{ metadata.title }}</a>
-
-			{#- Read more about `eleventy-navigation` at https://www.11ty.dev/docs/plugins/navigation/ #}
-			<nav>
-				<h2 class="visually-hidden">Top level navigation menu</h2>
-				<ul class="nav">
-				{%- for entry in collections.all | eleventyNavigation %}
-					<li class="nav-item"><a href="{{ entry.url }}"{% if entry.url == page.url %} aria-current="page"{% endif %}>{{ entry.title }}</a></li>
-				{%- endfor %}
-				</ul>
-			</nav>
-		</header>
-
-		<main id="skip">
-			{{ content | safe }}
-		</main>
-
-		<footer>Created by Alex Warren Web Design</footer>
-
-		<!-- Current page: {{ page.url | htmlBaseUrl }} -->
-	</body>
+    <!-- Current page: {{ page.url | htmlBaseUrl }} -->
+  </body>
 </html>

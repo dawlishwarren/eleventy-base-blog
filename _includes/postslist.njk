@@ -1,9 +1,29 @@
-{%- css %}.postlist { counter-reset: start-from {{ (postslistCounter or postslist.length) + 1 }} }{% endcss %}
-<ol reversed class="postlist">
-{% for post in postslist | reverse %}
-	<li class="postlist-item{% if post.url == url %} postlist-item-active{% endif %}">
-		<a href="{{ post.url }}" class="postlist-link">{% if post.data.title %}{{ post.data.title }}{% else %}<code>{{ post.url }}</code>{% endif %}</a>
-		<time class="postlist-date" datetime="{{ post.date | htmlDateString }}">{{ post.date | readableDate("LLLL yyyy") }}</time>
-	</li>
-{% endfor %}
+{%- css %}.postlist { counter-reset: start-from {{ (postslistCounter or
+postslist.length) + 1 }} }{% endcss %}
+<ol reversed class="postlist row">
+  {% for post in postslist | reverse %}
+  <div class="col-sm-6 mb-3 mb-sm-0">
+    <li
+      class="postlist-item{% if post.url == url %} postlist-item-active{% endif %}"
+    >
+      <div class="card" style="width: 18rem">
+        <div class="card-body">
+          <img src="/img/logo.png" class="card-img-top" alt="..." />
+          <a href="{{ post.url }}" class="postlist-link">
+            <h5 class="card-title">
+              {% if post.data.title %}{{ post.data.title }}{% else %}<code
+                >{{ post.url }}</code
+              >{% endif %}
+            </h5>
+          </a>
+          <time
+            class="postlist-date"
+            datetime="{{ post.date | htmlDateString }}"
+            >{{ post.date | readableDate("LLLL yyyy") }}</time
+          >
+        </div>
+      </div>
+    </li>
+  </div>
+  {% endfor %}
 </ol>
